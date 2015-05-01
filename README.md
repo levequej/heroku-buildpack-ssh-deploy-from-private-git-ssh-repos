@@ -14,8 +14,8 @@ Configure the public deploy key (the one here  ~/.ssh/heroku.pub) within your gi
 
 ###a.Set your deploy keys with heroku toolbelt from within your app dir
 
-	$ heroku config:set SSH_KEY="$(cat ~/.ssh/heroku)"
-	$ heroku config:set SSH_KEY_PUBLIC="$(cat ~/.ssh/heroku.pub)"
+	$ heroku config:set SSH_DEPLOY_KEY_PRIV="$(cat ~/.ssh/heroku)"
+	$ heroku config:set SSH_DEPLOY_KEY_PUB="$(cat ~/.ssh/heroku.pub)"
 
 
 ###b.This buildpack is to be chained at the beginning of a multi-buildpacks buildpacks chain like this one 
@@ -38,10 +38,10 @@ here for NPM
 
 #All comments & suggestions are welcome
 
-There's must  a better way to solve this simple problem and maybe  I'd better just have forked the nodejs official buildpack  :  I don't know I did not read it, but I needed a quick solution for my first heroku app to work asap,a nd I came up with that
+There must be a better way to solve this simple problem and maybe  I'd better just have forked the nodejs official buildpack  :  I don't know I did not read it, but I needed a quick solution for my first heroku app to work asap,a nd I came up with that
 
 I guess if you use a github private repo you'd much better use a OAuth token.
 
-About to be ... Tested on linux to be used with a private bitbucket repo (I do not think they have Oauth for non team repos : do they ?)
+Tested on linux to be used with a private bitbucket repo (I do not think they have Oauth for non team repos : do they ?)
 
 
