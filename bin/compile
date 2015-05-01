@@ -1,0 +1,44 @@
+#!/bin/bash
+# Buildpack to create a git command wrapper with custom private deployment key to be used for exmaple with npm
+# This is my first buildpack, I know nothing about heroku, don't hesitate to post comments if this is dangerous and I did not realize it
+# please genrerate dedicated deployment keys per app as deploying like this is not very secure 
+# (passing sensitive data to env seems bad, even in isolated Xen heroku container)
+# this can be used with mutiple package manager where you can redefine the git command
+# for example with npm , just add .npmrc to your app and add the following
+# git=${PWD}/.ssh/git-ssh-command.sh
+# Licence : Do whatever you like with this code as I'm not responsible for it
+
+set -e
+ENV_DIR=$3
+CACHE_DIR=$2  #unused
+BUILD_DIR=$1
+SSH_DIR=$BUILD_DIR/.ssh #Be carefull that this dir is very safe 
+
+mkdir -p $SSH_DIR/
+chmod 700 $SSH_DIR/
+
+#You gotta heroku:config set those SSH_DEPLOY_KEY_PRIV  & SSH_DEPLOY_KEY_PUB  with the content of the deploy keys within
+cp $ENV_DIR/SSH_DEPLOY_KEY_PRIV $SSH_DIR/heroku
+cp $ENV_DIR/SSH_DEPLOY_KEY_PUB  $SSH_DIR/heroku.pub #useless but let's have both
+chmod 400 $SSH_DIR/heroku
+chmod 400 $SSH_DIR/heroku.pub
+
+
+echo "ssh -o StrictHostKeyChecking=no -i $SSH_DIR/heroku \"\$@\"" > "$SSH_DIR/git-ssh.sh"
+echo "GIT_SSH=$SSH_DIR/git-ssh.sh  git \"\$@\"" > "$SSH_DIR/git-ssh-command.sh"
+
+#not even sure +x is needed
+chmod 500 "$SSH_DIR/git-ssh-command.sh"
+chmod 500 "$SSH_DIR/git-ssh.sh"
+
+
+#This will delete the dir with the deployment key
+mkdir -p "$BUILD_DIR/.profile.d"
+echo "unset -v SSH_DEPLOY_KEY_PRIV" > $BUILD_DIR/.profile.d/remove-deployument-keys.sh
+echo "unset -v SSH_DEPLOY_KEY_PUB" >> $BUILD_DIR/.profile.d/remove-deployument-keys.sh
+echo "rm -rf $SSH_DIR " >> $BUILD_DIR/.profile.d/remove-deployument-keys.sh
+
+
+
+
+
