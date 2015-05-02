@@ -35,6 +35,9 @@ here for NPM
 	$cat .npmrc
 	git=${PWD}/.ssh/git-ssh-command.sh
 
+UPDATE : or you could also use the envvar npm_config_git like so (I like it better b/c it does not interfere with your local build, and you do not need a different .npmrc in your heroku branch if you've got one
+
+	$ heroku config:set npm_config_git="\${PWD}/.ssh/git-ssh-command.sh"
 
 
 # All comments & suggestions are welcome

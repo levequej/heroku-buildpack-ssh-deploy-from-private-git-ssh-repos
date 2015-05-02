@@ -37,8 +37,3 @@ mkdir -p "$BUILD_DIR/.profile.d"
 echo "unset -v SSH_DEPLOY_KEY_PRIV" > $BUILD_DIR/.profile.d/remove-deployument-keys.sh
 echo "unset -v SSH_DEPLOY_KEY_PUB" >> $BUILD_DIR/.profile.d/remove-deployument-keys.sh
 echo "rm -rf $SSH_DIR " >> $BUILD_DIR/.profile.d/remove-deployument-keys.sh
-
-
-
-
-
